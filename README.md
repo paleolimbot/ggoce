@@ -15,7 +15,8 @@ coverage](https://codecov.io/gh/paleolimbot/ggoce/branch/master/graph/badge.svg)
 The goal of ggoce is to provide a minimal set of
 [ggplot2](https://ggplot2.tidyverse.org) components to make
 publication-quality plots of [oce](https://dankelley.github.io/oce/)
-objects.
+objects. **It is currently under initial proof-of-concept development
+and should be used for entertainment purposes only.**
 
 ## Installation
 
