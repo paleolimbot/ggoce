@@ -1,0 +1,19 @@
+Package: ggoce
+Title: Plot 'oce' objects using 'ggplot2'
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Dewey",
+           family = "Dunnington",
+           role = c("aut", "cre"),
+           email = "dewey.dunnington@dfo-mpo.gc.ca",
+           comment = c(ORCID = "0000-0002-9415-4582"))
+Description: Provides geometries, annotations, and related functions
+   for seamless plotting of 'oce' objects using 'ggplot2'.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    ggplot2,
+    oce
