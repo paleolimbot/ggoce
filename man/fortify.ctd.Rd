@@ -2,9 +2,12 @@
 % Please edit documentation in R/fortify.R
 \name{fortify.ctd}
 \alias{fortify.ctd}
+\alias{fortify.section}
 \title{Prepare 'oce' objects as data frames for 'ggplot2'}
 \usage{
 \method{fortify}{ctd}(model, ...)
+
+\method{fortify}{section}(model, ...)
 }
 \arguments{
 \item{model}{An 'oce' object}

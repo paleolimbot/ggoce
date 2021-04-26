@@ -17,10 +17,10 @@ RoxygenNote: 7.1.1
 Imports: 
     ggplot2,
     oce,
-    tibble
+    tibble,
+    vctrs
 URL: https://github.com/paleolimbot/ggoce
 BugReports: https://github.com/paleolimbot/ggoce/issues
 Suggests: 
-    covr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

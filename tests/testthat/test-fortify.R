@@ -16,3 +16,14 @@ test_that("fortify() works for ctd objects", {
     )
   )
 })
+
+test_that("fortify() works for section objects", {
+  data(section, package = "oce", envir = environment())
+  tbl <- fortify(section)
+
+  # check that metadata was added in the right order
+  expect_identical(
+    tbl$stationId[1:6],
+    c("3", "3", "3", "3", "3", "4")
+  )
+})
