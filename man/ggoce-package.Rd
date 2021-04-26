@@ -9,6 +9,14 @@
 Provides geometries, annotations, and related functions
    for seamless plotting of 'oce' objects using 'ggplot2'.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/paleolimbot/ggoce}
+  \item Report bugs at \url{https://github.com/paleolimbot/ggoce/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Dewey Dunnington \email{dewey.dunnington@dfo-mpo.gc.ca} (\href{https://orcid.org/0000-0002-9415-4582}{ORCID})
 

@@ -16,6 +16,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     ggplot2,
-    oce
+    oce,
+    tibble
 URL: https://github.com/paleolimbot/ggoce
 BugReports: https://github.com/paleolimbot/ggoce/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
