@@ -35,6 +35,7 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(ggplot2)
 library(ggoce)
+theme_set(theme_oce())
 data(ctd, package = "oce")
 
 ggplot(ctd, aes(x = salinity, y = depth)) +
@@ -43,3 +44,14 @@ ggplot(ctd, aes(x = salinity, y = depth)) +
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
+
+``` r
+data(section, package = "oce")
+
+ggplot(section, aes(distance, pressure)) +
+  geom_point(aes(col = temperature)) +
+  scale_y_reverse() +
+  scale_colour_viridis_b()
+```
+
+<img src="man/figures/README-example-sec-1.png" width="100%" />

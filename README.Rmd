@@ -39,9 +39,19 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(ggoce)
+theme_set(theme_oce())
 data(ctd, package = "oce")
 
 ggplot(ctd, aes(x = salinity, y = depth)) +
   geom_point() +
   scale_y_reverse()
+```
+
+```{r example-sec}
+data(section, package = "oce")
+
+ggplot(section, aes(distance, pressure)) +
+  geom_point(aes(col = temperature)) +
+  scale_y_reverse() +
+  scale_colour_viridis_b()
 ```
