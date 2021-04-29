@@ -15,6 +15,21 @@ geom_isopycnal(
   stat = "identity",
   position = "identity",
   ...,
+  lineend = "butt",
+  linejoin = "round",
+  linemitre = 10,
+  colour = "darkgray",
+  size = 0.4,
+  linetype = 1,
+  alpha = NA,
+  text.size = 3,
+  family = "",
+  trim_freezing = TRUE,
+  breaks = pretty,
+  n_breaks = 5,
+  n_sal = 200,
+  n_temp = 200,
+  eos = getOption("oceEOS", default = "gsw"),
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -53,6 +68,28 @@ a call to a position adjustment function.}
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
+
+\item{lineend, linejoin, linemitre, colour, size, linetype, alpha}{Customize
+the appearance of contour lines. See \code{\link[ggplot2:geom_path]{ggplot2::geom_path()}} for details.}
+
+\item{text.size, family}{Customize the appearance of contour line labels.
+See \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}} for details.}
+
+\item{trim_freezing}{Don't draw contours outside the freezing region.}
+
+\item{breaks}{A numeric vector or function used to generate breaks
+from objects.}
+
+\item{n_breaks}{Passed to \code{breaks} if \code{breaks} is a function.}
+
+\item{n_sal}{Number of points with which contours should be approximated
+on the salinity axis.}
+
+\item{n_temp}{Number of points with which contours should be approximated
+on the temperature axis.}
+
+\item{eos}{equation of state, either \code{"unesco"} (references 1 and 2)
+or \code{"gsw"} (references 3 and 4).}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}

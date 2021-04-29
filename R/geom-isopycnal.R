@@ -2,6 +2,11 @@
 #' Draw automagic isopycnals
 #'
 #' @inheritParams ggplot2::geom_point
+#' @inheritParams isopycnal_isolines
+#' @param lineend,linejoin,linemitre,colour,size,linetype,alpha Customize
+#'   the appearance of contour lines. See [ggplot2::geom_path()] for details.
+#' @param text.size,family Customize the appearance of contour line labels.
+#'   See [ggplot2::geom_text()] for details.
 #'
 #' @return A [ggplot2::layer()]
 #' @export
@@ -15,7 +20,16 @@
 #'   geom_point()
 #'
 geom_isopycnal <- function(mapping = NULL, data = NULL, stat = "identity",
-                           position = "identity", ..., na.rm = FALSE, show.legend = NA,
+                           position = "identity", ...,
+                           lineend = "butt", linejoin = "round", linemitre = 10,
+                           colour = "darkgray", size = 0.4, linetype = 1, alpha = NA,
+                           text.size = 3, family = "",
+                           trim_freezing = TRUE,
+                           breaks = pretty,
+                           n_breaks = 5,
+                           n_sal = 200, n_temp = 200,
+                           eos = getOption("oceEOS", default = "gsw"),
+                           na.rm = FALSE, show.legend = NA,
                            inherit.aes = TRUE) {
   ggplot2::layer(
     data = data,
@@ -25,7 +39,19 @@ geom_isopycnal <- function(mapping = NULL, data = NULL, stat = "identity",
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(
+      na.rm = na.rm,
+      ...,
+      lineend = lineend, linejoin = linejoin, linemitre = linemitre,
+      colour = colour, size = size, linetype = linetype, alpha = alpha,
+      text.size = text.size, family = family,
+      trim_freezing = trim_freezing,
+      breaks = breaks,
+      n_breaks = n_breaks,
+      n_sal = n_sal,
+      n_temp = n_temp,
+      eos = eos
+    )
   )
 }
 
@@ -44,12 +70,38 @@ GeomIsopycnal <- ggplot2::ggproto(
 
   default_aes = ggplot2::aes(x = NA_real_, y = NA_real_),
 
-  draw_panel = function(data, panel_params, coord) {
-    iso <- isopycnal_isolines(panel_params$x.range, panel_params$y.range)
+  draw_panel = function(data, panel_params, coord,
+                        lineend, linejoin, linemitre, colour, size, linetype, alpha,
+                        text.size, family,
+                        trim_freezing,
+                        breaks, n_breaks, n_sal, n_temp, eos) {
+    # note: really need to backtransform range here
+    iso <- isopycnal_isolines(
+      panel_params$x.range, panel_params$y.range,
+      trim_freezing = trim_freezing,
+      breaks = breaks,
+      n_breaks = n_breaks,
+      n_sal = n_sal,
+      n_temp = n_temp,
+      eos = eos
+    )
+
+    # transform back to coordinate space
     iso <- lapply(iso, coord$transform, panel_params)
 
+    # use the isolines grob to do the heavy lifting
     isoband::isolines_grob(
       iso,
+      gp = grid::gpar(
+        col = colour,
+        fontsize = text.size * ggplot2::.pt,
+        fontfamily = family,
+        lwd = size * ggplot2::.pt,
+        lty = linetype,
+        lineend = lineend,
+        linejoin = linejoin,
+        linemitre = linemitre
+      ),
       breaks = as.numeric(names(iso)),
       units = "native"
     )
