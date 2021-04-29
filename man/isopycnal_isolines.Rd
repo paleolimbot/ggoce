@@ -46,7 +46,7 @@ on the temperature axis.}
 or \code{"gsw"} (references 3 and 4).}
 }
 \value{
-An object returned by \code{\link[isoband:isobands]{isoband::isolines()}}. THe \code{x} values
+An object returned by \code{\link[isoband:isobands]{isoband::isolines()}}. The \code{x} values
 of the output refer to \code{salinity} and the \code{y} values of the output
 refer to temperature.
 }
