@@ -20,7 +20,17 @@ fortify.ctd <- function(model, ...) {
 #' @rdname fortify.ctd
 #' @export
 fortify.section <- function(model, ...) {
-  station_meta_names <- c("stationId", "longitude", "latitude", "time")
+
+  # not all metadata fields relate to the station and some are not
+  # subset consistently (but stationId always is, so base the fields
+  # on that)
+  station_id_length <- length(model@metadata$stationId)
+  metadata_length <- vapply(model@metadata, length, integer(1))
+  station_meta_names <- setdiff(
+    names(model@metadata)[metadata_length == station_id_length],
+    c("header", "filename", "sectionId")
+  )
+
   station_meta <- tibble::tibble(!!! model@metadata[station_meta_names], ...)
   station_meta$distance <- oce::geodDist(model)
   data_tbl <- lapply(model@data$station, fortify)
