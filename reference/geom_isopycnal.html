@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generate an 'isolines' object representing isopycnals — isopycnal_isolines • ggoce</title>
+<title>Draw automagic isopycnals — geom_isopycnal • ggoce</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Generate an 'isolines' object representing isopycnals — isopycnal_isolines" />
-<meta property="og:description" content="Generate an 'isolines' object representing isopycnals" />
+<meta property="og:title" content="Draw automagic isopycnals — geom_isopycnal" />
+<meta property="og:description" content="Draw automagic isopycnals" />
 
 
 
@@ -111,91 +111,106 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generate an 'isolines' object representing isopycnals</h1>
+    <h1>Draw automagic isopycnals</h1>
     <small class="dont-index">Source: <a href='https://github.com/paleolimbot/ggoce/blob/master/R/geom-isopycnal.R'><code>R/geom-isopycnal.R</code></a></small>
-    <div class="hidden name"><code>isopycnal_isolines.Rd</code></div>
+    <div class="hidden name"><code>geom_isopycnal.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generate an 'isolines' object representing isopycnals</p>
+    <p>Draw automagic isopycnals</p>
     </div>
 
-    <pre class="usage"><span class='fu'>isopycnal_isolines</span><span class='op'>(</span>
-  <span class='va'>salinity</span>,
-  <span class='va'>temperature</span>,
-  trim_freezing <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  breaks <span class='op'>=</span> <span class='va'>pretty</span>,
-  n_breaks <span class='op'>=</span> <span class='fl'>5</span>,
-  n_sal <span class='op'>=</span> <span class='fl'>200</span>,
-  n_temp <span class='op'>=</span> <span class='fl'>200</span>,
-  eos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"oceEOS"</span>, default <span class='op'>=</span> <span class='st'>"gsw"</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>geom_isopycnal</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"identity"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+
+<span class='va'>GeomIsopycnal</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>salinity</th>
-      <td><p>either practical salinity (in which case <code>temperature</code>
-and <code>pressure</code> must be provided) <em>or</em> an <code>oce</code> object, in
-which case <code>salinity</code>, <code>temperature</code> (in the ITS-90 scale; see
-next item), etc. are inferred from the object.</p></td>
+      <th>mapping</th>
+      <td><p>Set of aesthetic mappings created by <code><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes()</a></code> or
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
     </tr>
     <tr>
-      <th>temperature</th>
-      <td><p><em>in-situ</em> temperature (\(^\circ\)C), defined
-on the ITS-90 scale.  This scale is used by GSW-style calculation (as
-requested by setting <code>eos="gsw"</code>), and is the value contained within
-<code>ctd</code> objects (and probably most other objects created with data
-acquired in the past decade or two). Since the UNESCO-style calculation is
-based on IPTS-68, the temperature is converted within the present function,
-using <code><a href='https://dankelley.github.io/oce/reference/T68fromT90.html'>T68fromT90()</a></code>.</p></td>
+      <th>data</th>
+      <td><p>The data to be displayed in this layer. There are three
+options:</p>
+<p>If <code>NULL</code>, the default, the data is inherited from the plot
+data as specified in the call to <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot()</a></code>.</p>
+<p>A <code>data.frame</code>, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> for which variables will be created.</p>
+<p>A <code>function</code> will be called with a single argument,
+the plot data. The return value must be a <code>data.frame</code>, and
+will be used as the layer data. A <code>function</code> can be created
+from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p></td>
     </tr>
     <tr>
-      <th>trim_freezing</th>
-      <td><p>Don't draw contours outside the freezing region.</p></td>
+      <th>stat</th>
+      <td><p>The statistical transformation to use on the data for this
+layer, as a string.</p></td>
     </tr>
     <tr>
-      <th>breaks</th>
-      <td><p>A numeric vector or function used to generate breaks
-from objects.</p></td>
+      <th>position</th>
+      <td><p>Position adjustment, either as a string, or the result of
+a call to a position adjustment function.</p></td>
     </tr>
     <tr>
-      <th>n_breaks</th>
-      <td><p>Passed to <code>breaks</code> if <code>breaks</code> is a function.</p></td>
+      <th>...</th>
+      <td><p>Other arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>layer()</a></code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p></td>
     </tr>
     <tr>
-      <th>n_sal</th>
-      <td><p>Number of points with which contours should be approximated
-on the salinity axis.</p></td>
+      <th>na.rm</th>
+      <td><p>If <code>FALSE</code>, the default, missing values are removed with
+a warning. If <code>TRUE</code>, missing values are silently removed.</p></td>
     </tr>
     <tr>
-      <th>n_temp</th>
-      <td><p>Number of points with which contours should be approximated
-on the temperature axis.</p></td>
+      <th>show.legend</th>
+      <td><p>logical. Should this layer be included in the legends?
+<code>NA</code>, the default, includes if any aesthetics are mapped.
+<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.</p></td>
     </tr>
     <tr>
-      <th>eos</th>
-      <td><p>equation of state, either <code>"unesco"</code> (references 1 and 2)
-or <code>"gsw"</code> (references 3 and 4).</p></td>
+      <th>inherit.aes</th>
+      <td><p>If <code>FALSE</code>, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.org/reference/borders.html'>borders()</a></code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>An object of class <code>GeomIsopycnal</code> (inherits from <code>Geom</code>, <code>ggproto</code>, <code>gg</code>) of length 5.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object returned by <code><a href='https://rdrr.io/pkg/isoband/man/isobands.html'>isoband::isolines()</a></code>. The <code>x</code> values
-of the output refer to <code>salinity</code> and the <code>y</code> values of the output
-refer to temperature.</p>
+    <p>A <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>ctd</span>, package <span class='op'>=</span> <span class='st'>"oce"</span><span class='op'>)</span>
-<span class='va'>isolines</span> <span class='op'>&lt;-</span> <span class='fu'>isopycnal_isolines</span><span class='op'>(</span><span class='va'>ctd</span><span class='op'>[[</span><span class='st'>"salinity"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>ctd</span><span class='op'>[[</span><span class='st'>"temperature"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>ctd</span>, package <span class='op'>=</span> <span class='st'>"oce"</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>ctd</span><span class='op'>[[</span><span class='st'>"salinity"</span><span class='op'>]</span><span class='op'>]</span>, <span class='va'>ctd</span><span class='op'>[[</span><span class='st'>"temperature"</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='input'><span class='kw'>for</span> <span class='op'>(</span><span class='va'>line</span> <span class='kw'>in</span> <span class='va'>isolines</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>line</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='img'><img src='isopycnal_isolines-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>ctd</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>salinity</span>, <span class='va'>temperature</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_isopycnal</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_isopycnal-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
