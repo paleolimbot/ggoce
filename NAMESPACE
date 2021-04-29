@@ -2,5 +2,6 @@
 
 S3method(fortify,ctd)
 S3method(fortify,section)
+export(isopycnal_isolines)
 export(theme_oce)
 importFrom(ggplot2,fortify)

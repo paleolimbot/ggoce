@@ -16,7 +16,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     ggplot2,
+    gsw,
+    isoband,
     oce,
+    rlang,
     tibble,
     vctrs
 URL: https://github.com/paleolimbot/ggoce
