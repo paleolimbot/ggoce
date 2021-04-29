@@ -126,6 +126,21 @@
   stat <span class='op'>=</span> <span class='st'>"identity"</span>,
   position <span class='op'>=</span> <span class='st'>"identity"</span>,
   <span class='va'>...</span>,
+  lineend <span class='op'>=</span> <span class='st'>"butt"</span>,
+  linejoin <span class='op'>=</span> <span class='st'>"round"</span>,
+  linemitre <span class='op'>=</span> <span class='fl'>10</span>,
+  colour <span class='op'>=</span> <span class='st'>"darkgray"</span>,
+  size <span class='op'>=</span> <span class='fl'>0.4</span>,
+  linetype <span class='op'>=</span> <span class='fl'>1</span>,
+  alpha <span class='op'>=</span> <span class='cn'>NA</span>,
+  text.size <span class='op'>=</span> <span class='fl'>3</span>,
+  family <span class='op'>=</span> <span class='st'>""</span>,
+  trim_freezing <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  breaks <span class='op'>=</span> <span class='va'>pretty</span>,
+  n_breaks <span class='op'>=</span> <span class='fl'>5</span>,
+  n_sal <span class='op'>=</span> <span class='fl'>200</span>,
+  n_temp <span class='op'>=</span> <span class='fl'>200</span>,
+  eos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"oceEOS"</span>, default <span class='op'>=</span> <span class='st'>"gsw"</span><span class='op'>)</span>,
   na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
   show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
   inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
@@ -173,6 +188,44 @@ a call to a position adjustment function.</p></td>
 often aesthetics, used to set an aesthetic to a fixed value, like
 <code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
 to the paired geom/stat.</p></td>
+    </tr>
+    <tr>
+      <th>lineend, linejoin, linemitre, colour, size, linetype, alpha</th>
+      <td><p>Customize
+the appearance of contour lines. See <code><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>ggplot2::geom_path()</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>text.size, family</th>
+      <td><p>Customize the appearance of contour line labels.
+See <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>trim_freezing</th>
+      <td><p>Don't draw contours outside the freezing region.</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>A numeric vector or function used to generate breaks
+from objects.</p></td>
+    </tr>
+    <tr>
+      <th>n_breaks</th>
+      <td><p>Passed to <code>breaks</code> if <code>breaks</code> is a function.</p></td>
+    </tr>
+    <tr>
+      <th>n_sal</th>
+      <td><p>Number of points with which contours should be approximated
+on the salinity axis.</p></td>
+    </tr>
+    <tr>
+      <th>n_temp</th>
+      <td><p>Number of points with which contours should be approximated
+on the temperature axis.</p></td>
+    </tr>
+    <tr>
+      <th>eos</th>
+      <td><p>equation of state, either <code>"unesco"</code> (references 1 and 2)
+or <code>"gsw"</code> (references 3 and 4).</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
