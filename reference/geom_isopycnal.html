@@ -123,8 +123,6 @@
     <pre class="usage"><span class='fu'>geom_isopycnal</span><span class='op'>(</span>
   mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
   data <span class='op'>=</span> <span class='cn'>NULL</span>,
-  stat <span class='op'>=</span> <span class='st'>"identity"</span>,
-  position <span class='op'>=</span> <span class='st'>"identity"</span>,
   <span class='va'>...</span>,
   lineend <span class='op'>=</span> <span class='st'>"butt"</span>,
   linejoin <span class='op'>=</span> <span class='st'>"round"</span>,
@@ -135,6 +133,11 @@
   alpha <span class='op'>=</span> <span class='cn'>NA</span>,
   text.size <span class='op'>=</span> <span class='fl'>3</span>,
   family <span class='op'>=</span> <span class='st'>""</span>,
+  salinity_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"practical"</span>, <span class='st'>"absolute"</span><span class='op'>)</span>,
+  temperature_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"in-situ"</span>, <span class='st'>"conservative"</span><span class='op'>)</span>,
+  ref_pressure <span class='op'>=</span> <span class='fl'>0</span>,
+  ref_longitude <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ref_latitude <span class='op'>=</span> <span class='cn'>NULL</span>,
   trim_freezing <span class='op'>=</span> <span class='cn'>TRUE</span>,
   breaks <span class='op'>=</span> <span class='va'>pretty</span>,
   n_breaks <span class='op'>=</span> <span class='fl'>5</span>,
@@ -173,16 +176,6 @@ will be used as the layer data. A <code>function</code> can be created
 from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p></td>
     </tr>
     <tr>
-      <th>stat</th>
-      <td><p>The statistical transformation to use on the data for this
-layer, as a string.</p></td>
-    </tr>
-    <tr>
-      <th>position</th>
-      <td><p>Position adjustment, either as a string, or the result of
-a call to a position adjustment function.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>Other arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>layer()</a></code>. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -198,6 +191,33 @@ the appearance of contour lines. See <code><a href='https://ggplot2.tidyverse.or
       <th>text.size, family</th>
       <td><p>Customize the appearance of contour line labels.
 See <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>salinity_type</th>
+      <td><p>A salinity value. Use
+<code>salinity_type = "absolute"</code> to specify that <code>salinity</code> values
+are absolute salinities.</p></td>
+    </tr>
+    <tr>
+      <th>temperature_type</th>
+      <td><p>A temperature value. Use
+<code>temperature_type = "conservative"</code>
+to specify that these values are not in-situ temperature.</p></td>
+    </tr>
+    <tr>
+      <th>ref_pressure</th>
+      <td><p>The pressure that should be used to calculate
+density contours in dbar.</p></td>
+    </tr>
+    <tr>
+      <th>ref_longitude</th>
+      <td><p>The latitude and longitude that should
+be used in seawater calculations if <code>eos</code> is "gsw".</p></td>
+    </tr>
+    <tr>
+      <th>ref_latitude</th>
+      <td><p>The latitude and longitude that should
+be used in seawater calculations if <code>eos</code> is "gsw".</p></td>
     </tr>
     <tr>
       <th>trim_freezing</th>
@@ -224,8 +244,8 @@ on the temperature axis.</p></td>
     </tr>
     <tr>
       <th>eos</th>
-      <td><p>equation of state, either <code>"unesco"</code> (references 1 and 2)
-or <code>"gsw"</code> (references 3 and 4).</p></td>
+      <td><p>The equation of state: one of "unesco" or "gsw". See
+<code><a href='https://dankelley.github.io/oce/reference/swRho.html'>oce::swRho()</a></code> for details.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
