@@ -109,7 +109,7 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 A \code{\link[ggplot2:layer]{ggplot2::layer()}}
 }
 \description{
-Draw automagic isopycnals
+Draws density contour lines ("isopycnals") as a ggplot2 layer.
 }
 \examples{
 library(ggplot2)

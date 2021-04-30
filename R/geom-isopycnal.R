@@ -1,6 +1,8 @@
 
 #' Draw automagic isopycnals
 #'
+#' Draws density contour lines ("isopycnals") as a ggplot2 layer.
+#'
 #' @inheritParams ggplot2::geom_point
 #' @inheritParams isopycnal_isolines
 #' @param lineend,linejoin,linemitre,colour,size,linetype,alpha Customize
