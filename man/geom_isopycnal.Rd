@@ -12,8 +12,6 @@ An object of class \code{GeomIsopycnal} (inherits from \code{Geom}, \code{ggprot
 geom_isopycnal(
   mapping = NULL,
   data = NULL,
-  stat = "identity",
-  position = "identity",
   ...,
   lineend = "butt",
   linejoin = "round",
@@ -24,6 +22,11 @@ geom_isopycnal(
   alpha = NA,
   text.size = 3,
   family = "",
+  salinity_type = c("practical", "absolute"),
+  temperature_type = c("in-situ", "conservative"),
+  ref_pressure = 0,
+  ref_longitude = NULL,
+  ref_latitude = NULL,
   trim_freezing = TRUE,
   breaks = pretty,
   n_breaks = 5,
@@ -58,12 +61,6 @@ the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data. A \code{function} can be created
 from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
-\item{stat}{The statistical transformation to use on the data for this
-layer, as a string.}
-
-\item{position}{Position adjustment, either as a string, or the result of
-a call to a position adjustment function.}
-
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
@@ -74,6 +71,23 @@ the appearance of contour lines. See \code{\link[ggplot2:geom_path]{ggplot2::geo
 
 \item{text.size, family}{Customize the appearance of contour line labels.
 See \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}} for details.}
+
+\item{salinity_type}{A salinity value. Use
+\code{salinity_type = "absolute"} to specify that \code{salinity} values
+are absolute salinities.}
+
+\item{temperature_type}{A temperature value. Use
+\code{temperature_type = "conservative"}
+to specify that these values are not in-situ temperature.}
+
+\item{ref_pressure}{The pressure that should be used to calculate
+density contours in dbar.}
+
+\item{ref_longitude}{The latitude and longitude that should
+be used in seawater calculations if \code{eos} is "gsw".}
+
+\item{ref_latitude}{The latitude and longitude that should
+be used in seawater calculations if \code{eos} is "gsw".}
 
 \item{trim_freezing}{Don't draw contours outside the freezing region.}
 
@@ -88,8 +102,8 @@ on the salinity axis.}
 \item{n_temp}{Number of points with which contours should be approximated
 on the temperature axis.}
 
-\item{eos}{equation of state, either \code{"unesco"} (references 1 and 2)
-or \code{"gsw"} (references 3 and 4).}
+\item{eos}{The equation of state: one of "unesco" or "gsw". See
+\code{\link[oce:swRho]{oce::swRho()}} for details.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}

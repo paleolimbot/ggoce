@@ -7,6 +7,11 @@
 isopycnal_isolines(
   salinity,
   temperature,
+  ref_pressure = 0,
+  ref_longitude = NULL,
+  ref_latitude = NULL,
+  salinity_type = c("practical", "absolute"),
+  temperature_type = c("in-situ", "conservative"),
   trim_freezing = TRUE,
   breaks = pretty,
   n_breaks = 5,
@@ -16,18 +21,19 @@ isopycnal_isolines(
 )
 }
 \arguments{
-\item{salinity}{either practical salinity (in which case \code{temperature}
-and \code{pressure} must be provided) \emph{or} an \code{oce} object, in
-which case \code{salinity}, \code{temperature} (in the ITS-90 scale; see
-next item), etc. are inferred from the object.}
+\item{salinity, salinity_type}{A salinity value. Use
+\code{salinity_type = "absolute"} to specify that \code{salinity} values
+are absolute salinities.}
 
-\item{temperature}{\emph{in-situ} temperature (\eqn{^\circ}{deg}C), defined
-on the ITS-90 scale.  This scale is used by GSW-style calculation (as
-requested by setting \code{eos="gsw"}), and is the value contained within
-\code{ctd} objects (and probably most other objects created with data
-acquired in the past decade or two). Since the UNESCO-style calculation is
-based on IPTS-68, the temperature is converted within the present function,
-using \code{\link[oce:T68fromT90]{T68fromT90()}}.}
+\item{temperature, temperature_type}{A temperature value. Use
+\code{temperature_type = "conservative"}
+to specify that these values are not in-situ temperature.}
+
+\item{ref_pressure}{The pressure that should be used to calculate
+density contours in dbar.}
+
+\item{ref_longitude, ref_latitude}{The latitude and longitude that should
+be used in seawater calculations if \code{eos} is "gsw".}
 
 \item{trim_freezing}{Don't draw contours outside the freezing region.}
 
@@ -42,8 +48,8 @@ on the salinity axis.}
 \item{n_temp}{Number of points with which contours should be approximated
 on the temperature axis.}
 
-\item{eos}{equation of state, either \code{"unesco"} (references 1 and 2)
-or \code{"gsw"} (references 3 and 4).}
+\item{eos}{The equation of state: one of "unesco" or "gsw". See
+\code{\link[oce:swRho]{oce::swRho()}} for details.}
 }
 \value{
 An object returned by \code{\link[isoband:isobands]{isoband::isolines()}}. The \code{x} values
