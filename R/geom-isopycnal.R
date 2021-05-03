@@ -1,10 +1,20 @@
 
 #' Draw automagic isopycnals
 #'
-#' Draws density contour lines ("isopycnals") as a ggplot2 layer.
+#' Draws density contour lines ("isopycnals") as a ggplot2 layer. The
+#' `x` axis is assumed to be salinity; the `y` axis is assumed to be
+#' temperature. To use this geometry as standalone layer, you will need
+#' to specify which type of temperature (i.e., in-situ or conservative)
+#' and salinity (i.e., practical or absolute) are on these axes.
 #'
 #' @inheritParams ggplot2::geom_point
 #' @inheritParams isopycnal_isolines
+#' @param labels A function or vector of labels with which isopycnals
+#'   should be labeled.
+#' @param label_placer See [label_placer_isopycnal()] and
+#'   [isoband::label_placer_minmax()] for ways to customize
+#'   label placement. Use `NULL` for a default that avoids data passed
+#'   to the layer.
 #' @param lineend,linejoin,linemitre,colour,size,linetype,alpha Customize
 #'   the appearance of contour lines. See [ggplot2::geom_path()] for details.
 #' @param text.size,family Customize the appearance of contour line labels.
@@ -32,6 +42,8 @@ geom_isopycnal <- function(mapping = NULL, data = NULL,
                            ref_longitude = NULL, ref_latitude = NULL,
                            trim_freezing = TRUE,
                            breaks = pretty,
+                           labels = identity,
+                           label_placer = NULL,
                            n_breaks = 5,
                            n_sal = 200, n_temp = 200,
                            eos = getOption("oceEOS", default = "gsw"),
@@ -51,6 +63,8 @@ geom_isopycnal <- function(mapping = NULL, data = NULL,
     params = list(
       na.rm = na.rm,
       ...,
+      labels = labels,
+      label_placer = label_placer,
       lineend = lineend, linejoin = linejoin, linemitre = linemitre,
       colour = colour, size = size, linetype = linetype, alpha = alpha,
       text.size = text.size, family = family,
@@ -85,6 +99,7 @@ GeomIsopycnal <- ggplot2::ggproto(
   default_aes = ggplot2::aes(x = NA_real_, y = NA_real_),
 
   draw_panel = function(data, panel_params, coord,
+                        labels, label_placer,
                         lineend, linejoin, linemitre, colour, size, linetype, alpha,
                         text.size, family,
                         salinity_type, temperature_type,
@@ -110,6 +125,28 @@ GeomIsopycnal <- ggplot2::ggproto(
     # transform back to coordinate space
     iso <- lapply(iso, coord$transform, panel_params)
 
+    # transform data to coordinate space if we need it for the label_placer
+    data[c("x", "y")] <- coord$transform(data[c("x", "y")], panel_params)
+
+    # calculate breaks and labels
+    breaks <- names(iso)
+    if (is.character(labels) || is.numeric(labels)) {
+      labels <- as.character(labels)
+    } else {
+      labels <- rlang::as_function(labels)
+      labels <- labels(breaks)
+    }
+
+    # check lengths
+    if (length(breaks) != length(labels)) {
+      stop("`length(breaks)` must equal `length(labels)`", call. = FALSE)
+    }
+
+    # calculate the default label_placer if it is NULL
+    if (is.null(label_placer)) {
+      label_placer <- label_placer_isopycnal(data_avoid = data)
+    }
+
     # use the isolines grob to do the heavy lifting
     isoband::isolines_grob(
       iso,
@@ -123,7 +160,9 @@ GeomIsopycnal <- ggplot2::ggproto(
         linejoin = linejoin,
         linemitre = linemitre
       ),
-      breaks = as.numeric(names(iso)),
+      breaks = breaks,
+      labels = labels,
+      label_placer = label_placer,
       units = "native"
     )
   }
@@ -265,9 +304,51 @@ isopycnal_isolines <- function(salinity, temperature,
   )
 }
 
+#' Isopycnal label placement
+#'
+#' Automatic labels placement is difficult and infrequently perfect. The
+#' default strategy to place labels uses a similar strategy to
+#' [isoband::label_placer_minmax()] except coordinates are constrained
+#' to a fraction of the visible area to keep labels from disappearing
+#' outside the plot bounds. Optionally, one can pass in data to "avoid"
+#' while placing the label. Note that at the point the label placer
+#' receives the data, coordinates have been normalized to the range
+#' 0-1.
+#'
+#' @param bounds A vector of xmin, ymin, xmax, ymax, outside which
+#'   label centers should not exist.
+#' @param data_avoid An list of x, y values that the placer should
+#'   attempt to avoid when choosing a label center.
+#'
+#' @return A function suitable as input to [geom_isopycnal()]'s
+#'   `label_placer` argument.
+#' @export
+#'
+label_placer_isopycnal <- function(
+  bounds = c(0.1, 0.1, 0.9, 0.9),
+  data_avoid = NULL
+) {
+  force(bounds)
+  force(data_avoid)
+
+  isoband::label_placer_minmax()
+}
+
+# nocov start
+label_placer_debug <- function(label_placer = label_placer_isopycnal()) {
+  force(label_placer)
+
+  function(lines, labels_data) {
+    browser()
+    result <- label_placer(lines, labels_data)
+    result
+  }
+}
+# nocov end
+
 assert_has_lonlat <- function(ref_longitude, ref_latitude) {
   stopifnot(
     !is.null(ref_longitude), length(ref_longitude) == 1, is.numeric(ref_longitude),
-    !is.null(ref_latitude), length(ref_latitude) == 1, is.numeric(ref_latitude),
+    !is.null(ref_latitude), length(ref_latitude) == 1, is.numeric(ref_latitude)
   )
 }

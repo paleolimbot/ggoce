@@ -29,6 +29,8 @@ geom_isopycnal(
   ref_latitude = NULL,
   trim_freezing = TRUE,
   breaks = pretty,
+  labels = identity,
+  label_placer = NULL,
   n_breaks = 5,
   n_sal = 200,
   n_temp = 200,
@@ -94,6 +96,14 @@ be used in seawater calculations if \code{eos} is "gsw".}
 \item{breaks}{A numeric vector or function used to generate breaks
 from objects.}
 
+\item{labels}{A function or vector of labels with which isopycnals
+should be labeled.}
+
+\item{label_placer}{See \code{\link[=label_placer_isopycnal]{label_placer_isopycnal()}} and
+\code{\link[isoband:label_placer]{isoband::label_placer_minmax()}} for ways to customize
+label placement. Use \code{NULL} for a default that avoids data passed
+to the layer.}
+
 \item{n_breaks}{Passed to \code{breaks} if \code{breaks} is a function.}
 
 \item{n_sal}{Number of points with which contours should be approximated
@@ -123,7 +133,11 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 A \code{\link[ggplot2:layer]{ggplot2::layer()}}
 }
 \description{
-Draws density contour lines ("isopycnals") as a ggplot2 layer.
+Draws density contour lines ("isopycnals") as a ggplot2 layer. The
+\code{x} axis is assumed to be salinity; the \code{y} axis is assumed to be
+temperature. To use this geometry as standalone layer, you will need
+to specify which type of temperature (i.e., in-situ or conservative)
+and salinity (i.e., practical or absolute) are on these axes.
 }
 \examples{
 library(ggplot2)
