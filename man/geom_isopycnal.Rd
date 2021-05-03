@@ -30,7 +30,7 @@ geom_isopycnal(
   trim_freezing = TRUE,
   breaks = pretty,
   labels = identity,
-  label_placer = NULL,
+  label_placer = label_placer_isopycnal(),
   n_breaks = 5,
   n_sal = 200,
   n_temp = 200,

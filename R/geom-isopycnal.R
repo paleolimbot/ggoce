@@ -43,7 +43,7 @@ geom_isopycnal <- function(mapping = NULL, data = NULL,
                            trim_freezing = TRUE,
                            breaks = pretty,
                            labels = identity,
-                           label_placer = NULL,
+                           label_placer = label_placer_isopycnal(),
                            n_breaks = 5,
                            n_sal = 200, n_temp = 200,
                            eos = getOption("oceEOS", default = "gsw"),
@@ -140,11 +140,6 @@ GeomIsopycnal <- ggplot2::ggproto(
     # check lengths
     if (length(breaks) != length(labels)) {
       stop("`length(breaks)` must equal `length(labels)`", call. = FALSE)
-    }
-
-    # calculate the default label_placer if it is NULL
-    if (is.null(label_placer)) {
-      label_placer <- label_placer_isopycnal(data_avoid = data)
     }
 
     # use the isolines grob to do the heavy lifting
@@ -310,28 +305,55 @@ isopycnal_isolines <- function(salinity, temperature,
 #' default strategy to place labels uses a similar strategy to
 #' [isoband::label_placer_minmax()] except coordinates are constrained
 #' to a fraction of the visible area to keep labels from disappearing
-#' outside the plot bounds. Optionally, one can pass in data to "avoid"
-#' while placing the label. Note that at the point the label placer
-#' receives the data, coordinates have been normalized to the range
-#' 0-1.
+#' outside the plot bounds.
 #'
+#' @param padding A proportion of the plot (x, y) that should be excluded
+#'   on all sides when choosing label center points. Ignored if
+#'   `bounds` is specified.
 #' @param bounds A vector of xmin, ymin, xmax, ymax, outside which
 #'   label centers should not exist.
-#' @param data_avoid An list of x, y values that the placer should
-#'   attempt to avoid when choosing a label center.
+#' @param placement A string containing one or more of "t", "b", "l",
+#'   or "r". See [isoband::label_placer_minmax()].
 #'
 #' @return A function suitable as input to [geom_isopycnal()]'s
 #'   `label_placer` argument.
 #' @export
 #'
 label_placer_isopycnal <- function(
-  bounds = c(0.1, 0.1, 0.9, 0.9),
-  data_avoid = NULL
+  placement = "t",
+  padding = c(0.025, 0.025),
+  bounds = c(padding[1], padding[2], 1 - padding[1], 1 - padding[2])
 ) {
   force(bounds)
-  force(data_avoid)
+  minmax_placer <- isoband::label_placer_minmax(placement = placement)
 
-  isoband::label_placer_minmax()
+  function(lines, labels_data) {
+    # clip xy to bounds
+    lines <- lapply(lines, function(l) {
+      within_bounds <-
+        (l$x >= bounds[1]) &
+        (l$x <= bounds[3]) &
+        (l$y >= bounds[2]) &
+        (l$y <= bounds[4])
+
+      lapply(l, "[", within_bounds)
+    })
+
+    # remove tiny lines where the label might cover the whole line
+    line_length <- vapply(lines, function(l) {
+      n <- length(l$x)
+      if (n < 2) {
+        return(0)
+      }
+
+      sum(sqrt((l$x[-n] - l$x[-1]) ^ 2 + (l$y[-n] - l$y[-1]) ^ 2))
+    }, double(1))
+
+    # hardcoding a threshold of 20% of the plot
+    labels_data <- labels_data[line_length > 0.2, , drop = FALSE]
+
+    minmax_placer(lines, labels_data)
+  }
 }
 
 # nocov start

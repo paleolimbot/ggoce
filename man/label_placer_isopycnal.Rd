@@ -4,14 +4,22 @@
 \alias{label_placer_isopycnal}
 \title{Isopycnal label placement}
 \usage{
-label_placer_isopycnal(bounds = c(0.1, 0.1, 0.9, 0.9), data_avoid = NULL)
+label_placer_isopycnal(
+  placement = "t",
+  padding = c(0.025, 0.025),
+  bounds = c(padding[1], padding[2], 1 - padding[1], 1 - padding[2])
+)
 }
 \arguments{
+\item{placement}{A string containing one or more of "t", "b", "l",
+or "r". See \code{\link[isoband:label_placer]{isoband::label_placer_minmax()}}.}
+
+\item{padding}{A proportion of the plot (x, y) that should be excluded
+on all sides when choosing label center points. Ignored if
+\code{bounds} is specified.}
+
 \item{bounds}{A vector of xmin, ymin, xmax, ymax, outside which
 label centers should not exist.}
-
-\item{data_avoid}{An list of x, y values that the placer should
-attempt to avoid when choosing a label center.}
 }
 \value{
 A function suitable as input to \code{\link[=geom_isopycnal]{geom_isopycnal()}}'s
@@ -22,8 +30,5 @@ Automatic labels placement is difficult and infrequently perfect. The
 default strategy to place labels uses a similar strategy to
 \code{\link[isoband:label_placer]{isoband::label_placer_minmax()}} except coordinates are constrained
 to a fraction of the visible area to keep labels from disappearing
-outside the plot bounds. Optionally, one can pass in data to "avoid"
-while placing the label. Note that at the point the label placer
-receives the data, coordinates have been normalized to the range
-0-1.
+outside the plot bounds.
 }
