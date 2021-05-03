@@ -40,7 +40,11 @@
 
 
 <meta property="og:title" content="Draw automagic isopycnals — geom_isopycnal" />
-<meta property="og:description" content="Draws density contour lines (&quot;isopycnals&quot;) as a ggplot2 layer." />
+<meta property="og:description" content="Draws density contour lines (&quot;isopycnals&quot;) as a ggplot2 layer. The
+x axis is assumed to be salinity; the y axis is assumed to be
+temperature. To use this geometry as standalone layer, you will need
+to specify which type of temperature (i.e., in-situ or conservative)
+and salinity (i.e., practical or absolute) are on these axes." />
 
 
 
@@ -117,7 +121,11 @@
     </div>
 
     <div class="ref-description">
-    <p>Draws density contour lines ("isopycnals") as a ggplot2 layer.</p>
+    <p>Draws density contour lines ("isopycnals") as a ggplot2 layer. The
+<code>x</code> axis is assumed to be salinity; the <code>y</code> axis is assumed to be
+temperature. To use this geometry as standalone layer, you will need
+to specify which type of temperature (i.e., in-situ or conservative)
+and salinity (i.e., practical or absolute) are on these axes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>geom_isopycnal</span><span class='op'>(</span>
@@ -140,6 +148,8 @@
   ref_latitude <span class='op'>=</span> <span class='cn'>NULL</span>,
   trim_freezing <span class='op'>=</span> <span class='cn'>TRUE</span>,
   breaks <span class='op'>=</span> <span class='va'>pretty</span>,
+  labels <span class='op'>=</span> <span class='va'>identity</span>,
+  label_placer <span class='op'>=</span> <span class='cn'>NULL</span>,
   n_breaks <span class='op'>=</span> <span class='fl'>5</span>,
   n_sal <span class='op'>=</span> <span class='fl'>200</span>,
   n_temp <span class='op'>=</span> <span class='fl'>200</span>,
@@ -227,6 +237,18 @@ be used in seawater calculations if <code>eos</code> is "gsw".</p></td>
       <th>breaks</th>
       <td><p>A numeric vector or function used to generate breaks
 from objects.</p></td>
+    </tr>
+    <tr>
+      <th>labels</th>
+      <td><p>A function or vector of labels with which isopycnals
+should be labeled.</p></td>
+    </tr>
+    <tr>
+      <th>label_placer</th>
+      <td><p>See <code><a href='label_placer_isopycnal.html'>label_placer_isopycnal()</a></code> and
+<code><a href='https://rdrr.io/pkg/isoband/man/label_placer.html'>isoband::label_placer_minmax()</a></code> for ways to customize
+label placement. Use <code>NULL</code> for a default that avoids data passed
+to the layer.</p></td>
     </tr>
     <tr>
       <th>n_breaks</th>
