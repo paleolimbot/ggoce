@@ -5,9 +5,9 @@
 \alias{fortify.section}
 \title{Prepare 'oce' objects as data frames for 'ggplot2'}
 \usage{
-\method{fortify}{ctd}(model, ...)
+\method{fortify}{ctd}(model, ..., which = c("data", "combined", "metadata"))
 
-\method{fortify}{section}(model, ...)
+\method{fortify}{section}(model, ..., which = c("combined", "metadata", "data"))
 }
 \arguments{
 \item{model}{An 'oce' object}
