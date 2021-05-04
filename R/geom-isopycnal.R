@@ -37,7 +37,7 @@ geom_isopycnal <- function(mapping = NULL, data = NULL,
                            colour = "darkgray", size = 0.4, linetype = 1, alpha = NA,
                            text.size = 3, family = "",
                            salinity_type = c("practical", "absolute"),
-                           temperature_type = c("in-situ", "conservative"),
+                           temperature_type = c("in-situ", "potential", "conservative"),
                            ref_pressure = 0,
                            ref_longitude = NULL, ref_latitude = NULL,
                            trim_freezing = TRUE,
@@ -205,7 +205,7 @@ isopycnal_isolines <- function(salinity, temperature,
                                ref_longitude = NULL,
                                ref_latitude = NULL,
                                salinity_type = c("practical", "absolute"),
-                               temperature_type = c("in-situ", "conservative"),
+                               temperature_type = c("in-situ", "potential", "conservative"),
                                trim_freezing = TRUE,
                                breaks = pretty,
                                n_breaks = 5,
@@ -242,7 +242,7 @@ isopycnal_isolines <- function(salinity, temperature,
       longitude = ref_longitude,
       latitude = ref_latitude
     )
-  } else if(temperature_type == "conservative") {
+  } else if(temperature_type %in% c("potential", "conservative")) {
     assert_has_lonlat(ref_longitude, ref_latitude)
 
     sal_grid_practical <- sal_grid
@@ -257,13 +257,16 @@ isopycnal_isolines <- function(salinity, temperature,
     sal_grid_absolute <- NULL
   }
 
-  if (temperature_type == "conservative") {
+  # I can't find a way to "uncompute" potential temperature, so treating
+  # as identical to conservative temperature for now
+  if (temperature_type %in% c("potential", "conservative")) {
     temp_grid_in_situ <- gsw::gsw_t_from_CT(sal_grid_absolute, temp_grid, ref_pressure)
   } else {
     temp_grid_in_situ <- temp_grid
   }
 
-  # using in-situ density
+  # using in-situ density rho (could export density function
+  # as an option)
   rho_grid <- oce::swRho(
     salinity = sal_grid_practical,
     temperature = temp_grid_in_situ,

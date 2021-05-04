@@ -23,7 +23,7 @@ geom_isopycnal(
   text.size = 3,
   family = "",
   salinity_type = c("practical", "absolute"),
-  temperature_type = c("in-situ", "conservative"),
+  temperature_type = c("in-situ", "potential", "conservative"),
   ref_pressure = 0,
   ref_longitude = NULL,
   ref_latitude = NULL,

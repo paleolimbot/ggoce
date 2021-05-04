@@ -11,7 +11,7 @@ isopycnal_isolines(
   ref_longitude = NULL,
   ref_latitude = NULL,
   salinity_type = c("practical", "absolute"),
-  temperature_type = c("in-situ", "conservative"),
+  temperature_type = c("in-situ", "potential", "conservative"),
   trim_freezing = TRUE,
   breaks = pretty,
   n_breaks = 5,
