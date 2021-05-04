@@ -2,7 +2,13 @@
 #' Prepare 'oce' objects as data frames for 'ggplot2'
 #'
 #' @param model An 'oce' object
-#' @param ... Additional columns/values to initialize.
+#' @param which Most objects can be summarised as data frames at several
+#'   levels of granularity. The default is the most useful for plotting.
+#' @param type For adp objects, one of "velocity" (one row per time per
+#'   beam per cell), "bottom_track" (one row per time per beam), or
+#'   "metadata" (one row per time).
+#' @param ... Additional columns/values to initialize. Tidy evaluation
+#'   is supported.
 #' @return A [tibble::tibble()]
 #'
 #' @importFrom ggplot2 fortify
@@ -23,12 +29,12 @@ fortify.ctd <- function(model, ..., which = c("data", "combined", "metadata")) {
   data_vars <- names(model@data)[data_lengths == length(model@data[[1]])]
 
   tbl <- if (which == "data") {
-    tibble::tibble(!!! model@data[data_vars])
+    tibble::as_tibble(model@data[data_vars])
   } else if (which == "metadata") {
-    tibble::tibble(!!! model@metadata[meta_vars])
+    tibble::as_tibble(model@metadata[meta_vars])
   } else if (which == "combined") {
-    data <- tibble::tibble(!!! model@data[data_vars])
-    meta <- tibble::tibble(!!! model@metadata[meta_vars])
+    data <- tibble::as_tibble(model@data[data_vars])
+    meta <- tibble::as_tibble(model@metadata[meta_vars])
     vctrs::vec_cbind(meta, data)
   } else {
     stop(sprintf("Unsupported value for `which`: '%s'", which), call. = FALSE) # nocov
@@ -56,11 +62,11 @@ fortify.section <- function(model, ..., which = c("combined", "metadata", "data"
     data_tbl <- lapply(model@data$station, fortify, which = "data")
     vctrs::vec_rbind(!!! data_tbl)
   } else if (which == "metadata") {
-    station_meta <- tibble::tibble(!!! model@metadata[station_meta_names])
+    station_meta <- tibble::as_tibble(model@metadata[station_meta_names])
     station_meta$distance <- oce::geodDist(model)
     station_meta
   } else if (which == "combined") {
-    station_meta <- tibble::tibble(!!! model@metadata[station_meta_names])
+    station_meta <- tibble::as_tibble(model@metadata[station_meta_names])
     station_meta$distance <- oce::geodDist(model)
 
     data_tbl <- lapply(model@data$station, fortify, which = "data")
@@ -75,6 +81,69 @@ fortify.section <- function(model, ..., which = c("combined", "metadata", "data"
     )
   } else {
     stop(sprintf("Unsupported value for `which`: '%s'", which), call. = FALSE) # nocov
+  }
+
+  tbl_apply_dots(tbl, ...)
+}
+
+#' @rdname fortify.ctd
+#' @export
+fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metadata"),
+                        which = c("combined", "metadata", "data")) {
+  type <- match.arg(type)
+  which <- match.arg(which)
+
+  n_pings <- length(model@data$time)
+  n_distance <- length(model@data$distance)
+  n_beams <- model@metadata$numberOfBeams
+
+  meta_lengths <- vapply(model@metadata, length, integer(1))
+  meta_dim <- lapply(model@metadata, dim)
+  meta_dim_null <- vapply(meta_dim, is.null, logical(1))
+  data_lengths <- vapply(model@data, length, integer(1))
+  data_dim <- lapply(model@data, dim)
+  data_dim_null <- vapply(data_dim, is.null, logical(1))
+
+  glance_vars <- names(model@metadata)[(meta_lengths == 1) & data_dim_null]
+
+  meta_vars_data <- names(model@data)[(data_lengths == n_pings) & data_dim_null]
+  meta_vars_meta <- names(model@metadata)[(meta_lengths == n_pings) & meta_dim_null]
+  meta <- vctrs::vec_cbind(
+    tibble::as_tibble(model@data[meta_vars_data]),
+    tibble::as_tibble(model@metadata[meta_vars_meta])
+  )
+
+  data_is_velocity <- vapply(
+    data_dim,
+    identical,
+    c(n_pings, n_distance, n_beams),
+    FUN.VALUE = logical(1)
+  )
+
+  data_is_bottom_track <- vapply(
+    data_dim,
+    identical,
+    c(n_pings, n_beams),
+    FUN.VALUE = logical(1)
+  )
+
+  tbl <- if (type == "metadata" && which == "metadata") {
+    tibble::as_tibble(model@metadata[glance_vars])
+  } else if (type == "metadata" && which == "combined") {
+    vctrs::vec_cbind(
+      tibble::as_tibble(model@metadata[glance_vars]),
+      meta
+    )
+  } else if (which == "metadata") {
+    meta
+  } else if (type == "bottom_track" && which == "data") {
+    stop("Not implemented")
+  } else if (type == "bottom_track" && which == "combined") {
+    stop("Not implemented")
+  } else if (type == "velocity" && which == "data") {
+    stop("Not implemented")
+  } else if (type == "velocity" && which == "combined") {
+    stop("Not implemented")
   }
 
   tbl_apply_dots(tbl, ...)

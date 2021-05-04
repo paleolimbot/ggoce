@@ -3,16 +3,32 @@
 \name{fortify.ctd}
 \alias{fortify.ctd}
 \alias{fortify.section}
+\alias{fortify.adp}
 \title{Prepare 'oce' objects as data frames for 'ggplot2'}
 \usage{
 \method{fortify}{ctd}(model, ..., which = c("data", "combined", "metadata"))
 
 \method{fortify}{section}(model, ..., which = c("combined", "metadata", "data"))
+
+\method{fortify}{adp}(
+  model,
+  ...,
+  type = c("velocity", "bottom_track", "metadata"),
+  which = c("combined", "metadata", "data")
+)
 }
 \arguments{
 \item{model}{An 'oce' object}
 
-\item{...}{Additional columns/values to initialize.}
+\item{...}{Additional columns/values to initialize. Tidy evaluation
+is supported.}
+
+\item{which}{Most objects can be summarised as data frames at several
+levels of granularity. The default is the most useful for plotting.}
+
+\item{type}{For adp objects, one of "velocity" (one row per time per
+beam per cell), "bottom_track" (one row per time per beam), or
+"metadata" (one row per time).}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}
