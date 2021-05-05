@@ -4,9 +4,6 @@
 #' @param model An 'oce' object
 #' @param which Most objects can be summarised as data frames at several
 #'   levels of granularity. The default is the most useful for plotting.
-#' @param type For adp objects, one of "velocity" (one row per time per
-#'   beam per cell), "bottom_track" (one row per time per beam), or
-#'   "metadata" (one row per time).
 #' @param ... Additional columns/values to initialize. Tidy evaluation
 #'   is supported.
 #' @return A [tibble::tibble()]
@@ -19,7 +16,7 @@
 #' data(ctd, package = "oce")
 #' fortify(ctd)
 #'
-fortify.ctd <- function(model, ..., which = c("data", "combined", "metadata")) {
+fortify.ctd <- function(model, ..., which = c("combined", "data", "metadata")) {
   which <- match.arg(which)
 
   meta_lengths <- vapply(model@metadata, length, integer(1))
@@ -45,7 +42,7 @@ fortify.ctd <- function(model, ..., which = c("data", "combined", "metadata")) {
 
 #' @rdname fortify.ctd
 #' @export
-fortify.section <- function(model, ..., which = c("combined", "metadata", "data")) {
+fortify.section <- function(model, ..., which = c("combined", "data", "metadata")) {
   which <- match.arg(which)
 
   # not all metadata fields relate to the station and some are not
@@ -88,9 +85,7 @@ fortify.section <- function(model, ..., which = c("combined", "metadata", "data"
 
 #' @rdname fortify.ctd
 #' @export
-fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metadata"),
-                        which = c("data", "metadata", "combined")) {
-  type <- match.arg(type)
+fortify.adp <- function(model, ..., which = c("velocity", "bottom_track", "metadata")) {
   which <- match.arg(which)
 
   n_pings <- length(model@data$time)
@@ -131,47 +126,24 @@ fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metada
     FUN.VALUE = logical(1)
   )
 
-  tbl <- if (type == "metadata" && which == "metadata") {
-    tibble::as_tibble(model@metadata[glance_vars])
-  } else if (type == "metadata" && which == "combined") {
-    vctrs::vec_cbind(
-      tibble::as_tibble(model@metadata[glance_vars]),
-      meta
-    )
-  } else if (which == "metadata" || type == "metadata") {
+  tbl <- if (which == "metadata") {
     meta
-  } else if (type == "bottom_track" && which == "data") {
+  } else if (which == "bottom_track") {
     data <- lapply(model@data[data_is_bottom_track], "dim<-", NULL)
     dims <- expand.grid(time = model@data$time, beam = beam)
     vctrs::vec_cbind(
       tibble::as_tibble(dims),
       if (length(data) > 0) tibble::as_tibble(data)
     )
-  } else if (type == "bottom_track" && which == "combined") {
-    data <- lapply(model@data[data_is_bottom_track], "dim<-", NULL)
-    dims <- expand.grid(time = model@data$time, beam = beam)
-    dims$time <- NULL
-    vctrs::vec_cbind(
-      vctrs::vec_rep(meta, n_beams),
-      tibble::as_tibble(dims),
-      if (length(data) > 0) tibble::as_tibble(data)
-    )
-  } else if (type == "velocity" && which == "data") {
+  } else if (which == "velocity") {
     data <- lapply(model@data[data_is_velocity], "dim<-", NULL)
     dims <- expand.grid(time = model@data$time, distance = distance, beam = beam)
     vctrs::vec_cbind(
       tibble::as_tibble(dims),
       if (length(data) > 0) tibble::as_tibble(data)
     )
-  } else if (type == "velocity" && which == "combined") {
-    data <- lapply(model@data[data_is_velocity], "dim<-", NULL)
-    dims <- expand.grid(time = model@data$time, distance = distance, beam = beam)
-    dims$time <- NULL
-    vctrs::vec_cbind(
-      vctrs::vec_rep(meta, n_beams * n_distance),
-      tibble::as_tibble(dims),
-      if (length(data) > 0) tibble::as_tibble(data)
-    )
+  } else {
+    stop(sprintf("Unsupported value for `which`: '%s'", which), call. = FALSE) # nocov
   }
 
   tbl_apply_dots(tbl, ...)
