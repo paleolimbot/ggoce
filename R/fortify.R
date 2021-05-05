@@ -98,7 +98,7 @@ fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metada
   n_beams <- model@metadata$numberOfBeams
 
   distance <- model@data$distance
-  beam <- beamName(model, seq_len(n_beams))
+  beam <- oce::beamName(model, seq_len(n_beams))
   beam <- factor(beam, levels = beam)
 
   meta_lengths <- vapply(model@metadata, length, integer(1))
@@ -138,7 +138,7 @@ fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metada
       tibble::as_tibble(model@metadata[glance_vars]),
       meta
     )
-  } else if (which == "metadata") {
+  } else if (which == "metadata" || type == "metadata") {
     meta
   } else if (type == "bottom_track" && which == "data") {
     data <- lapply(model@data[data_is_bottom_track], "dim<-", NULL)

@@ -93,3 +93,19 @@ test_that("fortify() works for section objects", {
     c("3", "3", "3", "3", "3", "4")
   )
 })
+
+test_that("fortify() works for adp objects", {
+  data(adp, package = "oce", envir = environment())
+
+  expect_identical(nrow(fortify(adp, type = "metadata", which = "metadata")), 1L)
+  expect_identical(nrow(fortify(adp, type = "metadata", which = "data")), 25L)
+  expect_identical(nrow(fortify(adp, type = "metadata", which = "combined")), 25L)
+
+  expect_identical(nrow(fortify(adp, type = "bottom_track", which = "metadata")), 25L)
+  expect_identical(nrow(fortify(adp, type = "bottom_track", which = "data")), 25L * 4L)
+  expect_identical(nrow(fortify(adp, type = "bottom_track", which = "combined")), 25L * 4L)
+
+  expect_identical(nrow(fortify(adp, type = "velocity", which = "metadata")), 25L)
+  expect_identical(nrow(fortify(adp, type = "velocity", which = "data")), 25L * 4L * 84L)
+  expect_identical(nrow(fortify(adp, type = "velocity", which = "combined")), 25L * 4L * 84L)
+})
