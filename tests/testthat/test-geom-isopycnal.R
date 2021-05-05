@@ -20,16 +20,42 @@ test_that("isopycnal_isolines() works", {
   expect_true(all(iso_df$rho >= 22.5 & iso_df$rho <= 24.5))
 })
 
+test_that("isopycnal_isolines() can use a numeric vector for breaks", {
+  iso <- isopycnal_isolines(30:31, 4:14, breaks = 1:5)
+  expect_identical(names(iso), as.character(1:5))
+})
+
 test_that("isopycnal_isolines() can use gsw", {
   iso <- isopycnal_isolines(30:31, 4:14)
   iso_gsw <- isopycnal_isolines(30:31, 4:14, ref_latitude = 45, ref_longitude = -64, eos = "gsw")
   expect_identical(names(iso)[1:5], names(iso_gsw)[1:5])
 })
 
-test_that("isopycnal_isolines() works with conservative temperature", {
+test_that("isopycnal_isolines() works with conservative temperature and absolute salinity", {
   # stub to remind me to write this test
-})
+  iso <- isopycnal_isolines(30:31, 4:14)
 
-test_that("isopycnal_isoline() works with absolute salinity", {
-  # stub to remind me to write this test
+  iso2 <- isopycnal_isolines(
+    30:31, 4:14,
+    ref_latitude = 45, ref_longitude = -64,
+    temperature_type = "conservative"
+  )
+
+  iso3 <- isopycnal_isolines(
+    30:31, 4:14,
+    ref_latitude = 45, ref_longitude = -64,
+    salinity_type = "absolute"
+  )
+
+  iso4 <- isopycnal_isolines(
+    30:31, 4:14,
+    ref_latitude = 45, ref_longitude = -64,
+    temperature_type = "conservative",
+    salinity_type = "absolute"
+  )
+
+
+  expect_identical(names(iso)[1:5], names(iso2)[1:5])
+  expect_identical(names(iso)[1:5], names(iso3)[1:5])
+  expect_identical(names(iso)[1:5], names(iso4)[1:5])
 })
