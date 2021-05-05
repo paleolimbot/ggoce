@@ -89,13 +89,17 @@ fortify.section <- function(model, ..., which = c("combined", "metadata", "data"
 #' @rdname fortify.ctd
 #' @export
 fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metadata"),
-                        which = c("combined", "metadata", "data")) {
+                        which = c("data", "metadata", "combined")) {
   type <- match.arg(type)
   which <- match.arg(which)
 
   n_pings <- length(model@data$time)
   n_distance <- length(model@data$distance)
   n_beams <- model@metadata$numberOfBeams
+
+  distance <- model@data$distance
+  beam <- beamName(model, seq_len(n_beams))
+  beam <- factor(beam, levels = beam)
 
   meta_lengths <- vapply(model@metadata, length, integer(1))
   meta_dim <- lapply(model@metadata, dim)
@@ -104,7 +108,7 @@ fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metada
   data_dim <- lapply(model@data, dim)
   data_dim_null <- vapply(data_dim, is.null, logical(1))
 
-  glance_vars <- names(model@metadata)[(meta_lengths == 1) & data_dim_null]
+  glance_vars <- names(model@metadata)[(meta_lengths == 1) & meta_dim_null]
 
   meta_vars_data <- names(model@data)[(data_lengths == n_pings) & data_dim_null]
   meta_vars_meta <- names(model@metadata)[(meta_lengths == n_pings) & meta_dim_null]
@@ -137,13 +141,37 @@ fortify.adp <- function(model, ..., type = c("velocity", "bottom_track", "metada
   } else if (which == "metadata") {
     meta
   } else if (type == "bottom_track" && which == "data") {
-    stop("Not implemented")
+    data <- lapply(model@data[data_is_bottom_track], "dim<-", NULL)
+    dims <- expand.grid(time = model@data$time, beam = beam)
+    vctrs::vec_cbind(
+      tibble::as_tibble(dims),
+      if (length(data) > 0) tibble::as_tibble(data)
+    )
   } else if (type == "bottom_track" && which == "combined") {
-    stop("Not implemented")
+    data <- lapply(model@data[data_is_bottom_track], "dim<-", NULL)
+    dims <- expand.grid(time = model@data$time, beam = beam)
+    dims$time <- NULL
+    vctrs::vec_cbind(
+      vctrs::vec_rep(meta, n_beams),
+      tibble::as_tibble(dims),
+      if (length(data) > 0) tibble::as_tibble(data)
+    )
   } else if (type == "velocity" && which == "data") {
-    stop("Not implemented")
+    data <- lapply(model@data[data_is_velocity], "dim<-", NULL)
+    dims <- expand.grid(time = model@data$time, distance = distance, beam = beam)
+    vctrs::vec_cbind(
+      tibble::as_tibble(dims),
+      if (length(data) > 0) tibble::as_tibble(data)
+    )
   } else if (type == "velocity" && which == "combined") {
-    stop("Not implemented")
+    data <- lapply(model@data[data_is_velocity], "dim<-", NULL)
+    dims <- expand.grid(time = model@data$time, distance = distance, beam = beam)
+    dims$time <- NULL
+    vctrs::vec_cbind(
+      vctrs::vec_rep(meta, n_beams * n_distance),
+      tibble::as_tibble(dims),
+      if (length(data) > 0) tibble::as_tibble(data)
+    )
   }
 
   tbl_apply_dots(tbl, ...)
