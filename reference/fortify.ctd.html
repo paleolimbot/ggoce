@@ -85,9 +85,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/articles/ggoce.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -121,18 +118,13 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for ctd</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span>, which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"data"</span>, <span class='st'>"combined"</span>, <span class='st'>"metadata"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span>, which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"combined"</span>, <span class='st'>"data"</span>, <span class='st'>"metadata"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># S3 method for section</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span>, which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"combined"</span>, <span class='st'>"metadata"</span>, <span class='st'>"data"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span>, which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"combined"</span>, <span class='st'>"data"</span>, <span class='st'>"metadata"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># S3 method for adp</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span>
-  <span class='va'>model</span>,
-  <span class='va'>...</span>,
-  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"velocity"</span>, <span class='st'>"bottom_track"</span>, <span class='st'>"metadata"</span><span class='op'>)</span>,
-  which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"combined"</span>, <span class='st'>"metadata"</span>, <span class='st'>"data"</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span>, which <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"velocity"</span>, <span class='st'>"bottom_track"</span>, <span class='st'>"metadata"</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,12 +143,6 @@ is supported.</p></td>
       <td><p>Most objects can be summarised as data frames at several
 levels of granularity. The default is the most useful for plotting.</p></td>
     </tr>
-    <tr>
-      <th>type</th>
-      <td><p>For adp objects, one of "velocity" (one row per time per
-beam per cell), "bottom_track" (one row per time per beam), or
-"metadata" (one row per time).</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -167,20 +153,26 @@ beam per cell), "bottom_track" (one row per time per beam), or
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>ctd</span>, package <span class='op'>=</span> <span class='st'>"oce"</span><span class='op'>)</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span><span class='op'>(</span><span class='va'>ctd</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: oce</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gsw</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: testthat</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 181 x 7</span><span>
-#&gt;     scan timeS pressure depth temperature salinity  flag
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>   130   129     1.48  1.47        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>   131   130     1.67  1.66        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>   132   131     2.05  2.04        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>   133   132     2.24  2.22        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>   134   133     2.62  2.60        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>   135   134     2.67  2.65        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>   136   135     3.00  2.98        14.2     29.9     0
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>   137   136     3.20  3.17        14.1     30.0     0
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>   138   137     3.48  3.45        14.1     30.0     0
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>   139   138     3.72  3.69        14.1     30.0     0
-#&gt; </span><span style='color: #949494;'># … with 171 more rows</span><span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: oce</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gsw</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: testthat</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 181 x 31</span><span>
+#&gt;    pressureType deploymentType waterDepth model type  hexfilename   serialNumber
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;lgl&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> sea          unknown        </span><span style='color: #BB0000;'>NA</span><span>         25    SBE   </span><span style='color: #949494;'>"</span><span>c:\\seasoft… </span><span style='color: #949494;'>""</span><span>          
+#&gt; </span><span style='color: #949494;'># … with 171 more rows, and 24 more variables: serialNumberTemperature &lt;chr&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   serialNumberConductivity &lt;chr&gt;, systemUploadTime &lt;dttm&gt;, ship &lt;chr&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   scientist &lt;chr&gt;, institute &lt;chr&gt;, address &lt;chr&gt;, cruise &lt;chr&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   station &lt;chr&gt;, date &lt;dttm&gt;, startTime &lt;dttm&gt;, recoveryTime &lt;lgl&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, sampleInterval &lt;dbl&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   sampleIntervalUnits &lt;chr&gt;, filename &lt;chr&gt;, scan &lt;int&gt;, timeS &lt;dbl&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   pressure &lt;dbl&gt;, depth &lt;dbl&gt;, temperature &lt;dbl&gt;, salinity &lt;dbl&gt;, flag &lt;dbl&gt;</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
